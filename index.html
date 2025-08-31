@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="music-container">
+        <div class="song-details">
+            <div class="song-name" id="song-name"></div>
+            <div class="artist-name" id="artist-name">Name</div>
+            <div class="album-art" id="album-art"></div>
+        </div>
+        <div class="progress" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+            <div class="circle" id="progress-circle"></div>
+        </div>
+        <div class="controls">
+            <div class="rewind" id="rewind" onclick="skip_rewind()">&#9198;</div>
+            <div class="pause-play" id="pause-play" onclick="pauseplay()">&#9208;</div>
+            <div class="forward" id="forward" onclick="skip_forward()">&#9197;</div>
+        </div>
+        <audio id="audio-player" src="music/HoliznaCC0 - Mutant Club.mp3"></audio>
+    </div>
+</body>
+<script>
+    const songname=document.getElementById("song-name");
+    const artistname=document.getElementById("artist-name");
+    const albumart=document.getElementById("album-art");
+    const btn = document.getElementById("pause-play");
+    const forward = document.getElementById("forward");
+    const rewind = document.getElementById("rewind");
+    const audio = document.getElementById("audio-player");
+    const progresscontainer = document.getElementById("progress-container");
+    const progressbar=document.getElementById("progress-bar");
+    const progresscircle = document.getElementById("progress-circle");
+    let songs = [
+        {
+            title: "Mutant Club",
+            artist:"Holizana",
+            src: "music/HoliznaCC0 - Mutant Club.mp3"
+        },
+        {
+            title:"Always and Forever",
+            artist:"Zane Little",
+            src: "music/Zane Little - Always and Forever.mp3"
+        },
+        {
+            title:"Got a Feeling",
+            artist:"Zane Little",
+            src: "music/Zane Little - Got a Feeling.mp3"
+
+        }];
+    songname.innerHTML = songs[0].title;
+    artistname.innerHTML = songs[0].artist
+    let currentsong=0;
+    function pauseplay(){
+        if (audio.paused){
+            audio.play();
+            btn.innerHTML = "\u25B6";
+        }
+        else{
+            audio.pause();
+            btn.innerHTML = '\u23F8';
+        }
+        
+    }
+
+    function skip_forward(){
+            if (currentsong>=songs.length -1){ 
+                currentsong=0;
+                loadsong(currentsong)
+            }
+            else{
+                currentsong++;
+                loadsong(currentsong)
+            }
+        
+    }
+    function skip_rewind(){
+            if (currentsong==0){ //if the current song is the first song being played
+                currentsong=songs.length-1; //loops
+                loadsong(currentsong)//calls loadsong to update audio, songname etc
+            }
+            else{
+                currentsong--;
+                loadsong(currentsong)
+            }
+        
+    }  
+    function loadsong(index) {
+        audio.src = songs[index].src; //assigning the current song index to the audio src
+        songname.innerHTML = songs[index].title; //changing the name of the song
+        artistname.innerHTML = songs[index].artist;
+        audio.play(); //playing the song
+        btn.innerHTML = "\u23F8"; //pause the song
+}
+
+audio.addEventListener("timeupdate", () => {  //adding an event listener which triggers the timeupdate event and calls a function
+    const { currentTime, duration } = audio; //unwraps the two current time and duration of the audio 
+    const progressPercent = (currentTime / duration) * 100; //calculates the percentage at which the song has played
+    progressbar.style.width = `${progressPercent}%`; //width of the bar increases based on how long the song has been playing for
+    progresscircle.style.left = `${progressPercent+42}%`; //moves the circel to the left based on the period of play
+});
+
+progresscontainer.addEventListener("click", (e) => {
+    const width = progresscontainer.clientWidth; // total bar width
+    const clickX = e.offsetX; // x-position of click within the bar
+    const duration = audio.duration; 
+    audio.currentTime = (clickX / width) * duration; // jump to that point
+});
+
+let isDragging = false;
+
+progresscircle.addEventListener("mousedown", () => {
+    isDragging = true; // start dragging
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) isDragging = false; // stop dragging
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return; // only work while dragging
+    
+    const rect = progresscontainer.getBoundingClientRect();
+    let offsetX = e.clientX - rect.left; // mouse x relative to bar
+    
+    // Clamp values inside bar
+    if (offsetX < 0) offsetX = 0;
+    if (offsetX > rect.width) offsetX = rect.width;
+    
+    const duration = audio.duration;
+    audio.currentTime = (offsetX / rect.width) * duration; // update song
+});
+
+</script>
+</html>

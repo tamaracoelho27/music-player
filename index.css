@@ -1,0 +1,124 @@
+html,body{
+    height: 100vh;
+    width:100vw;
+    margin:0;
+    padding:0;
+    background-color: pink;
+}
+.music-container{
+    display:flex;
+    margin:20vh auto;
+    background-color:white; 
+    height:60%;
+    width:20%;
+    border-radius:30px;
+    box-shadow: 40px 40px 40px rgba(137, 23, 23, 0.1);
+}
+.song-details{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.song-name{
+    font-size: 1.5em;
+    color: black;
+    margin-top:4%;
+}
+.artist-name{
+    font-size:1em;
+    color:black;
+    margin-top:6%;
+}
+.album-art{
+   width:80%;
+   margin-top:10%;
+   background-color: rgb(237, 152, 152);
+   height:40%;
+}
+.progress{
+    display:flex;
+}
+.progress-bar{
+    position:absolute;
+    top:65%;
+    left:42.5%;
+    width:16%;
+    background-color:pink;
+    height:0.5%;
+    border-radius:10px;
+}
+.circle{
+    position:absolute;
+    background-color:rgb(235, 99, 121);
+    height:1.5%;
+    width:0.7%;
+    left:45%;
+    top:64.6%;
+    border-radius:50%
+}
+.controls {
+    display: flex;
+    justify-content: space-around; /* space buttons evenly */
+    width: 15%;
+    position: absolute;
+    bottom: 25%; 
+    left:43.5%;
+    height:5%;
+}
+
+.controls:hover{
+    cursor:pointer;
+}
+@media (max-width:1024px){
+    .music-container{
+        width:30%;
+    }
+    .controls{
+        left:43%;
+    }
+}
+@media (max-width: 768px) {
+    .music-container{
+       height:60%;
+       width:30%;
+    }
+    .controls{
+        top:65%;
+        left:43%;
+    }
+    .song-name{
+        font-size:1.2em;
+    }
+    .artist-name{
+        font-size: 0.8em;
+    }
+    .controls{
+        width:20%;
+        left:40%
+    }
+}
+
+@media (max-width:426px){
+    .music-container{
+        width:50%;
+    }
+    .song-name{
+        font-size:1.1em;
+    }
+    .artist-name{
+        font-size:0.7em;
+    }
+}
+@media (max-width:376px){
+    .music-container{
+        width:65%;
+    }
+}
+
+
+
+
+
